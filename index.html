@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>For EMEE 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+:root {
+    --romantic-font: 'Dancing Script', cursive;
+    --body-font: 'Quicksand', sans-serif;
+    --handwritten: 'Caveat', cursive;
+}
+body {
+    background: linear-gradient(135deg, #fff0f3 0%, #ffdeeb 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: var(--body-font);
+    margin:0;
+}
+h1, h2 { font-family: var(--romantic-font); }
+.pulse-text { animation: pulse 2s infinite; }
+@keyframes pulse { 0%{scale:1}50%{scale:1.05}100%{scale:1;} }
+
+.main-card {
+    z-index: 50; position: relative;
+    background: rgba(255,255,255,0.85); backdrop-filter: blur(15px);
+    border: 2px solid white; box-shadow: 0 20px 40px rgba(255,77,109,0.1);
+    padding:1rem; border-radius:2rem;
+}
+
+.floating-item {
+    position: absolute; pointer-events: none; z-index: 1;
+    animation: float-up 7s infinite linear; opacity: 0;
+}
+@keyframes float-up {
+    0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+    15% { opacity: .7; }
+    85% { opacity: .7; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+#yes-btn {
+    transition: all 0.4s ease-in-out;
+    background: linear-gradient(to right,#ff4d6d,#ff758c);
+    position: relative; overflow: visible; color: white; z-index:10;
+    min-width:120px; border-radius:9999px; padding:.75rem 1.5rem;
+    font-size:24px;
+}
+.heart-burst {
+    position:absolute;font-size:16px;animation:heart-fly .8s ease-out forwards;pointer-events:none;z-index:5;
+}
+@keyframes heart-fly {
+    0%{transform:translate(0,0) scale(1);opacity:1;}
+    100%{transform:translate(var(--x),var(--y)) scale(2);opacity:0;}
+}
+
+.rainbow-bg {
+    background: linear-gradient(120deg,#fff0f3,#ffe5ec,#ffc2d1,#ffe5ec,#fff0f3);
+    background-size:400% 400%;
+    animation:gradient-flow 5s ease infinite;
+}
+@keyframes gradient-flow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+.lyric {
+    position:absolute;color:#ff4d6d;font-size:18px;font-family:var(--handwritten);
+    opacity:0;animation:fade-lyric 3s forwards;
+}
+@keyframes fade-lyric {
+    0%{opacity:0;transform:translateY(0);}
+    10%{opacity:1;}
+    90%{opacity:1;}
+    100%{opacity:0;transform:translateY(-20px);}
+}
+
+/* Music Player UI */
+#music-ui {
+    position:fixed;bottom:10px;left:50%;transform:translateX(-50%);
+    background:#ffe5ec;backdrop-filter:blur(12px);
+    padding:10px 16px;border-radius:16px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+    display:flex;align-items:center;gap:8px;z-index:1000;width:90%;max-width:400px;
+}
+#music-ui .track-info { flex:1;font-family:var(--handwritten);font-size:16px;color:#333; display:flex;flex-direction:column; gap:4px;}
+#music-ui input[type="range"] { width:100%;cursor:pointer;-webkit-appearance:none; }
+#music-ui input[type="range"]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:#ccc;}
+#music-ui input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#ff4d6d;margin-top:-4px;}
+#music-ui .controls { display:flex;align-items:center;gap:8px;}
+#music-ui .controls button { font-size:20px;color:#ff4d6d;background:none;border:none; cursor:pointer; }
+
+/* GIF Enhancement */
+#display-gif {
+    border-radius:25px; box-shadow:0 15px 35px rgba(255,77,109,0.3);
+    transition: transform 0.5s, box-shadow 0.5s; width:230px; max-width:85vw;
+    margin-bottom:1rem;
+}
+#display-gif:hover { transform: scale(1.05); box-shadow:0 20px 50px rgba(255,77,109,0.5);}
+@media (max-width: 480px){
+    h1 { font-size:1.75rem; }
+    .button-container { flex-direction: column; gap:12px; }
+    #yes-btn, #no-btn { width:90vw; }
+    #display-gif { width:200px; }
+}
+</style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-2">
+
+<div id="floating-container"></div>
+
+<div class="main-card text-center w-full max-w-xl">
+    <div id="valentine-content">
+        <img id="display-gif" src="pic1.gif.gif" class="mx-auto object-cover transition-opacity duration-300">
+        <h1 class="text-gray-800 mb-6 pulse-text">
+            Will you be my Valentine, <br><span class="text-pink-500 font-bold">EMEE</span>? 💖
+        </h1>
+        <div class="flex button-container items-center justify-center gap-4 min-h-[160px]">
+            <button id="yes-btn" class="rounded-full font-bold shadow-xl hover:scale-105 active:scale-95">Yes</button>
+            <button id="no-btn" class="rounded-full bg-gray-100 font-bold text-gray-500 shadow-md border border-gray-200 hover:bg-gray-200">No</button>
+        </div>
+    </div>
+</div>
+
+<!-- Music UI -->
+<div id="music-ui" style="display:none;">
+    <div class="track-info">
+        <div id="track-name">Shaky (Valentine’s Mix)</div>
+        <div id="time-display">0:00 / 0:00</div>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+    </div>
+    <div class="controls">
+        <button id="play-btn">▶️</button>
+    </div>
+</div>
+
+<script>
+// Floating Hearts
+const container = document.getElementById('floating-container');
+function createFloatingItem() {
+    const items=['❤️','💖','🌸','🌹','🌷','✨','🌼'];
+    const e=document.createElement('div');
+    e.innerHTML=items[Math.floor(Math.random()*items.length)];
+    e.className='floating-item';
+    e.style.left=Math.random()*100+'vw';
+    e.style.fontSize=(Math.random()*18+12)+'px';
+    e.style.animationDuration=(Math.random()*4+5)+'s';
+    container.appendChild(e);
+    setTimeout(()=>e.remove(),8000);
+}
+let fastInterval=setInterval(createFloatingItem,100);
+setTimeout(()=>{clearInterval(fastInterval); setInterval(createFloatingItem,300);},5000);
+
+// Lyric popups
+const lyricTexts=["💖","❤️","🌸","💕","💗"];
+function createLyric(t){
+    const lyric=document.createElement('div');
+    lyric.innerText=t;
+    lyric.className='lyric';
+    lyric.style.left=Math.random()*70+'vw';
+    lyric.style.top=Math.random()*50+'vh';
+    container.appendChild(lyric);
+    setTimeout(()=>lyric.remove(),3000);
+}
+
+// Buttons
+let noCount=0;
+const noBtn=document.getElementById('no-btn'),
+      yesBtn=document.getElementById('yes-btn'),
+      gif=document.getElementById('display-gif'),
+      content=document.getElementById('valentine-content');
+
+const phrases=["No","umeek Haa Kr ?","mar Khaygi Kutii?","adiii Bii","acha Khalas Kiss Da Doga Baaz","nh chahyi kiss","ma roo doga ab","ma Mar Jaogaaa","bass Im Dead","ok Ab Tu Mere Bhoot Sy Baat krahi","abbhi tk na bol rahi","maanjaa yh kidnap kroga","mai washh mai saah haao kaan","umeeek sudharjaaa","No :("];
+
+noBtn.addEventListener('click',()=>{
+  noCount++;
+  gif.style.opacity='0.5';
+  setTimeout(()=>{gif.src=`pic${Math.min(noCount+1,14)}.gif.gif`; gif.style.opacity='1';},150);
+  
+  // Dynamically grow Yes button
+  let screenWidth = window.innerWidth;
+  let newWidth = Math.min(120 + noCount*40, screenWidth*0.9);
+  let newFont = Math.min(24 + noCount*4, 80);
+  let newPaddingV = Math.min(12 + noCount*2, 40);
+  let newPaddingH = Math.min(24 + noCount*3, screenWidth*0.45);
+  
+  yesBtn.style.width = newWidth + 'px';
+  yesBtn.style.fontSize = newFont + 'px';
+  yesBtn.style.padding = newPaddingV + 'px ' + newPaddingH + 'px';
+  
+  noBtn.innerText=phrases[Math.min(noCount,phrases.length-1)];
+});
+
+yesBtn.addEventListener('click',()=>{
+  const audio=document.createElement('audio');
+  audio.src='shaky_clip.mp3';
+  audio.loop=true;
+  audio.volume=0.5;
+  document.body.appendChild(audio);
+
+  const musicUI=document.getElementById('music-ui');
+  musicUI.style.display='flex';
+  const playBtn=document.getElementById('play-btn'),
+        volumeSlider=document.getElementById('volume-slider'),
+        timeDisplay=document.getElementById('time-display');
+  playBtn.onclick=()=>{if(audio.paused){audio.play();playBtn.innerText='⏸️';}else{audio.pause();playBtn.innerText='▶️';}};
+  volumeSlider.oninput=()=>{audio.volume=volumeSlider.value;}
+  audio.addEventListener('timeupdate',()=>{
+    let ct=audio.currentTime, d=audio.duration;
+    let mm=Math.floor(ct/60), ss=Math.floor(ct%60);
+    let dm=Math.floor(d/60), ds=Math.floor(d%60);
+    if(ss<10) ss='0'+ss; if(ds<10) ds='0'+ds;
+    timeDisplay.innerText=`${mm}:${ss} / ${dm}:${ds}`;
+  });
+  audio.play().catch(()=>{playBtn.innerText='▶️';});
+
+  document.body.classList.add('rainbow-bg');
+
+  // Heart burst
+  for(let i=0;i<25;i++){
+    const heart=document.createElement('div');
+    heart.innerText=['❤️','💖','💘'][Math.floor(Math.random()*3)];
+    heart.className='heart-burst';
+    const angle=Math.random()*2*Math.PI;
+    const distance=Math.random()*100+40;
+    heart.style.setProperty('--x',Math.cos(angle)*distance+'px');
+    heart.style.setProperty('--y',-Math.abs(Math.sin(angle)*distance)+'px');
+    yesBtn.appendChild(heart);
+    setTimeout(()=>heart.remove(),800);
+  }
+
+  // Valentine content
+  content.innerHTML=`
+  <div class="flex flex-col items-center relative">
+    <img src="happy.gif.gif" class="h-[230px] rounded-3xl shadow-2xl mb-6 border-4 border-pink-300 animate-bounce" />
+    <h2 class="text-4xl md:text-5xl font-bold text-pink-600 mb-4">Yayyy! ❤️</h2>
+    <div class="text-lg md:text-2xl text-gray-700 leading-relaxed px-2 md:px-4">
+      <p class="mb-4">hehe mujh pata tha tum haa hi krogi!</p>
+      <span class="text-2xl font-bold text-pink-500 text-handwritten">
+        Love you mai wash ,,, every day is Valentine's with you!
+      </span>
+    </div>
+  </div>`;
+
+  // Confetti
+  const end=Date.now()+10000;
+  (function frame(){ confetti({particleCount:3,angle:60,spread:55,origin:{x:0,y:0.8},colors:['#ff4d6d','#ffb3c1','#ffffff']});
+    confetti({particleCount:3,angle:120,spread:55,origin:{x:1,y:0.8},colors:['#ff4d6d','#ffb3c1','#ffffff']});
+    if(Date.now()<end) requestAnimationFrame(frame); })();
+
+  setInterval(()=>createLyric(lyricTexts[Math.floor(Math.random()*lyricTexts.length)]),1000);
+});
+</script>
+</body>
+</html>
